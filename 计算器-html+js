@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>我的计算器</title>
+    <link rel="stylesheet" type="text/css" href="css/calc.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="middle">
+            <div class="mycalculator" id="mycalculator">
+                <div class="top" id="top">
+                    <form action="" id="myform" method="get">
+                        <input type="text" class="outcome" id="outcome" value="">
+                    </form>
+                </div>
+                <div class="bottom">
+                    <div class="button-area">
+                        <button class="func-button " id="save" value="save" onclick="getval(this.value)">保存</button>
+                        <button class="func-button " id="cancel" value="cancel" style="background-color:black;" onclick="getval(this.value)">取消</button>
+                        <button class="func-button " id="delete" value="delete" onclick="getval(this.value)">删除</button>
+                        <button class="func-button " id="clear" value="clear" onclick="getval(this.value)">清除</button>
+                    </div>
+                    <div class="button-area">
+                        <button class="func-button" id="square" value="square" onclick="getval(this.value)">平方</button>
+                        <button class="func-button" id="radical" value="radical" onclick="getval(this.value)">求平方根</button>
+                        <button class="func-button" id="pow" value="pow" onclick="getval(this.value)">多次方</button>
+                        <button class="func-button" id="%" value="%" onclick="getval(this.value)">%</button>
+                    </div>
+                    <div class="button-area">
+                        <button class="func-button" id="num9" value="9" onclick="getval(this.value)">9</button>
+                        <button class="func-button" id="num8" value="8" onclick="getval(this.value)">8</button>
+                        <button class="func-button" id="num7" value="7" onclick="getval(this.value)">7</button>
+                        <button class="func-button" id="num6" value="6" onclick="getval(this.value)">6</button>
+                    </div>
+                    <div class="button-area">
+                        <button class="func-button" id="num5" value="5" onclick="getval(this.value)">5</button>
+                        <button class="func-button" id="num4" value="4" onclick="getval(this.value)"> 4</button>
+                        <button class="func-button" id="num3" value="3" onclick="getval(this.value)">3</button>
+                        <button class="func-button" id="num2" value="2" onclick="getval(this.value)">2</button>
+                    </div>
+                    <div class="button-area">
+                        <button class="func-button" id="num1" value="1" onclick="getval(this.value)"> 1</button>
+                        <button class="func-button" id="num0" value="0" onclick="getval(this.value)"> 0</button>
+                        <button class="func-button" id="." value="." onclick="getval(this.value)"> .</button>
+                        <button class="func-button" id="equal" value="=" onclick="getval(this.value)"> =</button>
+                    </div>
+                    <div class="button-area">
+                        <button class="func-button" value="+" id="plus" onclick="getval(this.value)">+</button>
+                        <button class="func-button" value="-" id="substract" onclick="getval(this.value)">-</button>
+                        <button class="func-button" value="*" id="multiply" onclick="getval(this.value)">*</button>
+                        <button class="func-button" value="/" id="divide" onclick="getval(this.value)">/</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+<script style="text/javascript">
+var num1 = 0;
+var op = '';
+var toclear = '';
+
+function getval(num) {
+    switch (num) {
+        case 'clear':
+            document.getElementById("outcome").value = null;
+            document.getElementById("outcome").focus();
+            break;
+
+        case 'delete':
+            var arr = document.getElementById("outcome");
+            arr.value = arr.value.substring(0, arr.value.length - 1);
+            break;
+
+        case '=':
+            var jisuan = document.getElementById("outcome").value;
+            var re = /[\+\-\*\/\%]/;
+            if (jisuan.length > 0) {
+              // 判断出现的表达式，如3+9,3%4
+                if (/^(-?\d+\.?\d{0,3}[\+\-\*\/\%]{1}\d+\.?\d{0,3})$/.test(jisuan)) {
+
+                    var num = jisuan.search(re);
+
+                    var op = jisuan.substring(num, num + 1);
+                    var num1 = parseFloat(jisuan.substring(0, num));
+                    var num2 = parseFloat(jisuan.substring(num, jisuan.length));
+
+
+                    document.getElementById("outcome").value = calculate(num1, num2, op);
+
+                } else if (jisuan.indexOf("square")) {
+                    re = /square/;
+                    var num = jisuan.search(re);
+
+                    var num1 = parseFloat(jisuan.substring(0, num));
+                    var op = "square";
+                    var num2 = 1;
+                    document.getElementById("outcome").value = calculate(num1, num2, op);
+
+                } else if (jisuan.indexOf("radical")) {
+                    re = /radical/;
+                    var num = jisuan.search(re);
+
+                    var num1 = parseInt(jisuan.substring(0, num));
+                    var op = "square";
+                    var num2 = 1;
+                    document.getElementById("outcome").value = calculate(num1, num2, op);
+
+                } else if (jisuan.indexOf("pow")) {
+                    re = /pow/;
+                    var num = jisuan.search(re);
+
+                    var num1 = parseInt(jisuan.substring(0, num));
+                    var op = "pow";
+                    var num2 = parseInt(jisuan.substring(num, jisuan.length));;
+                    document.getElementById("outcome").value = calculate(num1, num2, op);
+
+                }
+                if (/^-?\d+\.?\d{0,3}[\+\-\*\/\%]{1}\d+\.?\d{0,3}\S{6,20}$/.test(jisuan)) {
+
+                    alert("请重新输入");
+
+
+                }
+            }
+            break;
+            
+        default:
+
+            document.getElementById("outcome").value += num;
+            break;
+
+    }
+
+}
+
+
+
+
+
+
+
+function calculate(n1, n2, op) {
+    switch (op) {
+        case '+':
+            return n1 + n2;
+            break;
+        case '-':
+            return n1 - n2;
+            break;
+        case '*':
+            return n1 * n2;
+            break;
+        case '/':
+            if (n2 == 0) {
+                alert("请重新输入number2,number2不能为0");
+
+            } else {
+                return n1 / n2;
+                break;
+            };
+
+        case '%':
+            return n1 % n2;
+            break;
+        case 'square':
+            return n1 * n1;
+            break;
+        case 'radical':
+          if (n1>0){
+             return Math.sqrt(n1);
+               break;
+           }else{
+                 alert("请重新输入");
+           }
+           
+          
+        case 'pow':
+            return Math.pow(n1, n2);
+
+    }
+
+
+
+}
+</script>
+
+</html>
